@@ -1,13 +1,30 @@
 package org.example.retofxhibernate.Copia;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "copias")
 public class Copia implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
+
+    @Column(name = "id_pelicula")
     private Integer id_pelicula;
+
+    @Column(name = "id_usuario")
     private Integer id_usuario;
+
+    @Column(name = "estado")
     private String estado;
+
+    @Column(name = "soporte")
     private String soporte;
+
+    public Copia() {}
 
     public Copia(Integer id, Integer id_pelicula, Integer id_usuario, String estado, String soporte) {
         this.id = id;
@@ -15,9 +32,6 @@ public class Copia implements Serializable {
         this.id_usuario = id_usuario;
         this.estado = estado;
         this.soporte = soporte;
-    }
-
-    public Copia() {
     }
 
     @Override

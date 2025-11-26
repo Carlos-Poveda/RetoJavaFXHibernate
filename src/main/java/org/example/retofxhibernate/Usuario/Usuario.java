@@ -1,10 +1,21 @@
 package org.example.retofxhibernate.Usuario;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "usuarios") // Tabla en MySQL
 public class Usuario implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
+
+    @Column(name = "nombre_usuario")
     private String nombre_usuario;
+
+    @Column(name = "contraseña")
     private String contraseña;
 
     public Usuario(Integer id, String nombre_usuario, String contraseña) {
@@ -14,15 +25,6 @@ public class Usuario implements Serializable {
     }
 
     public Usuario() {
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nombre_usuario='" + nombre_usuario + '\'' +
-                ", contraseña='" + contraseña + '\'' +
-                '}';
     }
 
     public Integer getId() {
