@@ -9,8 +9,8 @@ import javafx.scene.control.TableView;
 import org.example.retofxhibernate.Copia.Copia;
 import org.example.retofxhibernate.Copia.CopiaRepository;
 import org.example.retofxhibernate.Usuario.Usuario;
+import org.example.retofxhibernate.Usuario.UsuarioRepository;
 import org.hibernate.SessionFactory;
-
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 public class PrincipalController implements Initializable {
     private Usuario usuarioLogueado;
     private CopiaRepository copiaRepository;
+    private UsuarioRepository usuarioRepository;
     @javafx.fxml.FXML
     private TableView<Copia> tablaCopias;
     @javafx.fxml.FXML
@@ -66,7 +67,11 @@ public class PrincipalController implements Initializable {
 
     @javafx.fxml.FXML
     public void agregar(ActionEvent actionEvent) {
+        if (usuarioLogueado.equals(usuarioRepository.findById(1L))) {
 
+        } else {
+
+        }
     }
 
     public void cargarCopiasDelUsuario() {
@@ -82,8 +87,6 @@ public class PrincipalController implements Initializable {
 
     public void setUsuarioLogueado(Usuario usuario) {
         this.usuarioLogueado = usuario;
-        // Una vez que tenemos el usuario y el repositorio (establecido en setCopiaRepository),
-        // podemos cargar los datos.
         if (this.copiaRepository != null) {
             cargarCopiasDelUsuario();
         }
@@ -91,7 +94,6 @@ public class PrincipalController implements Initializable {
 
     public void setCopiaRepository(SessionFactory sessionFactory) {
         this.copiaRepository = new CopiaRepository(sessionFactory);
-        // Intentamos cargar las copias si el usuario ya fue asignado
         if (this.usuarioLogueado != null) {
             cargarCopiasDelUsuario();
         }

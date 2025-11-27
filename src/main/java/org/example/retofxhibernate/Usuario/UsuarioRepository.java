@@ -32,7 +32,13 @@ public class UsuarioRepository implements Repository<Usuario> {
 
     @Override
     public Optional<Usuario> findById(Long id) {
-        return Optional.empty();
+        try (Session session = sessionFactory.openSession()) {
+            Usuario usuario = session.find(Usuario.class, id.intValue());
+            return Optional.ofNullable(usuario);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     @Override
