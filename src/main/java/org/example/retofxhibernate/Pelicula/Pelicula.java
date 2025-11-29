@@ -1,13 +1,29 @@
 package org.example.retofxhibernate.Pelicula;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 
-public class    Pelicula implements Serializable {
+@Entity
+@Table(name = "peliculas")
+public class Pelicula implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "titulo")
     private String titulo;
+
+    @Column(name = "genero")
     private String genero;
+
+    @Column(name = "anio_lanzamiento")
     private Integer año;
+
+    @Column(name = "descripcion")
     private String descripcion;
+
+    @Column(name = "director")
     private String director;
 
     public Pelicula(Integer id, String titulo, String genero, Integer año, String descripcion, String director) {

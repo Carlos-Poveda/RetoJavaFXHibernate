@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="TOP_CENTER" prefHeight="601.0" prefWidth="737.0" spacing="10.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.retofxhibernate.Controllers.PrincipalController">
+<VBox alignment="TOP_CENTER" prefHeight="601.0" prefWidth="737.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.retofxhibernate.Controllers.PrincipalController">
    <children>
       <Label text="Listado de copias">
          <font>
@@ -37,6 +36,28 @@
       </TableView>
       <HBox alignment="CENTER_RIGHT" prefHeight="58.0" prefWidth="717.0" spacing="10.0">
          <children>
+            <Button fx:id="btnRefrescar" mnemonicParsing="false" onAction="#refrescar">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../imagenes/actualizar.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnSalir" mnemonicParsing="false" onAction="#salir" text="Salir">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="btnVolver" mnemonicParsing="false" onAction="#volver" text="Volver a inicio">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
             <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregar" text="Añadir">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox alignment="TOP_CENTER" prefHeight="431.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.retofxhibernate.Controllers.DetallesPeliController">
+   <children>
+      <Label text="Detalles de la copia">
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+         <font>
+            <Font name="Comic Sans MS Bold" size="24.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagenes/analisis-de-busqueda.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <VBox prefHeight="292.0" prefWidth="580.0">
+         <children>
+            <FlowPane>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <children>
+                  <Label text="Título: " />
+                  <Label fx:id="lblTitulo" text="Label">
+                     <FlowPane.margin>
+                        <Insets />
+                     </FlowPane.margin>
+                  </Label>
+               </children>
+            </FlowPane>
+            <FlowPane>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <children>
+                  <Label text="Género: " />
+                  <Label fx:id="lblGenero" text="Label" />
+               </children>
+            </FlowPane>
+            <FlowPane>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <children>
+                  <Label text="Director: " />
+                  <Label fx:id="lblDirector" text="Label" />
+               </children>
+            </FlowPane>
+            <FlowPane>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <children>
+                  <Label text="Fecha de lanzamiento: " />
+                  <Label fx:id="lblAnio" text="Label" />
+               </children>
+            </FlowPane>
+            <FlowPane>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <children>
+                  <Label text="Sinopsis: " />
+                  <Label fx:id="lblSinopsis" text="Label" />
+               </children>
+            </FlowPane>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </VBox>
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <Button fx:id="btnVolver" mnemonicParsing="false" onAction="#volver" text="Volver">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="30.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

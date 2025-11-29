@@ -60,7 +60,7 @@ public class LoginController implements Initializable {
 
             PrincipalController principalController = loader.getController();
             principalController.setUsuarioLogueado(usuarioLogueado);
-            principalController.setCopiaRepository(DataProvider.getSessionFactory());
+            principalController.setSessionFactory(DataProvider.getSessionFactory());
 
             Stage stage = new Stage();
             stage.setTitle("Lista de copias");

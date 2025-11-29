@@ -1,14 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.retofxhibernate.Controllers.AgregarCopiaController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox alignment="TOP_CENTER" prefHeight="461.0" prefWidth="851.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.retofxhibernate.Controllers.AgregarCopiaController">
+   <children>
+      <Label text="Nueva copia">
+         <font>
+            <Font name="Comic Sans MS Bold" size="24.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../imagenes/nuevo.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Label>
+      <HBox prefHeight="337.0" prefWidth="851.0">
+         <children>
+            <VBox prefHeight="306.0" prefWidth="1076.0">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <children>
+                  <TableView fx:id="tablaPelis" prefHeight="315.0" prefWidth="566.0">
+                    <columns>
+                      <TableColumn fx:id="colPeliID" prefWidth="30.0" text="ID" />
+                      <TableColumn fx:id="colPeliTitulo" prefWidth="93.0" text="Título" />
+                        <TableColumn fx:id="colPeliGenero" text="Género" />
+                        <TableColumn fx:id="colPeliFecha" prefWidth="139.0" text="Fecha de lanzamiento" />
+                        <TableColumn fx:id="colPeliDescrip" prefWidth="147.0" text="Sinopsis" />
+                        <TableColumn fx:id="colPeliDirector" minWidth="6.0" prefWidth="144.0" text="Director" />
+                    </columns>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox prefHeight="306.0" prefWidth="618.0">
+               <children>
+                  <Label text="ID película: " />
+                  <TextField fx:id="tfIdPeli" />
+                  <Label text="Estado: " />
+                  <TextField fx:id="tfEstado" />
+                  <Label text="Soporte: " />
+                  <TextField fx:id="tfSoporte" />
+               </children>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregar" text="Añadir copia">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -5,14 +5,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="TOP_CENTER" prefHeight="461.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AgregarPeliController">
+<VBox alignment="TOP_CENTER" prefHeight="461.0" prefWidth="851.0" spacing="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.retofxhibernate.Controllers.AgregarPeliController">
    <children>
       <Label text="Agregar película">
          <VBox.margin>
@@ -29,16 +29,40 @@
             </ImageView>
          </graphic>
       </Label>
-      <TableView fx:id="tablaPeliculas" prefHeight="318.0" prefWidth="600.0">
-        <columns>
-          <TableColumn fx:id="colID" prefWidth="51.0" text="ID" />
-          <TableColumn fx:id="colTitulo" prefWidth="99.0" text="Título" />
-            <TableColumn fx:id="colGenero" prefWidth="75.0" text="Género" />
-            <TableColumn fx:id="colFecha" prefWidth="141.0" text="Fecha de lanzamiento" />
-            <TableColumn fx:id="colDescripcion" prefWidth="150.0" text="Sinopsis" />
-            <TableColumn fx:id="colDirector" prefWidth="83.0" text="Director" />
-        </columns>
-      </TableView>
+      <HBox prefHeight="318.0" prefWidth="706.0">
+         <children>
+            <TableView fx:id="tablaPeliculas" prefHeight="318.0" prefWidth="601.0">
+              <columns>
+                <TableColumn fx:id="colID" prefWidth="51.0" text="ID" />
+                <TableColumn fx:id="colTitulo" prefWidth="99.0" text="Título" />
+                  <TableColumn fx:id="colGenero" prefWidth="75.0" text="Género" />
+                  <TableColumn fx:id="colFecha" prefWidth="141.0" text="Fecha de lanzamiento" />
+                  <TableColumn fx:id="colDescripcion" prefWidth="150.0" text="Sinopsis" />
+                  <TableColumn fx:id="colDirector" prefWidth="83.0" text="Director" />
+              </columns>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </TableView>
+            <VBox prefHeight="298.0" prefWidth="215.0" spacing="5.0">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <children>
+                  <Label text="Título: " />
+                  <TextField fx:id="tfTitulo" />
+                  <Label text="Género: " />
+                  <TextField fx:id="tfGenero" />
+                  <Label text="Fecha de lanzamiento: " />
+                  <TextField fx:id="tfFecha" />
+                  <Label text="Sinopsis: " />
+                  <TextField fx:id="tfSinopsis" />
+                  <Label text="Director: " />
+                  <TextField fx:id="tfDirector" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
       <HBox alignment="CENTER_RIGHT">
          <children>
             <Button fx:id="btnAgregarPeli" mnemonicParsing="false" onAction="#agregarPeli" text="Nueva película" />

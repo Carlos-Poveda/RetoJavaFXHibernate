@@ -3,6 +3,7 @@ package org.example.retofxhibernate.Copia;
 import org.example.retofxhibernate.Common.Repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -28,9 +29,22 @@ public class CopiaRepository implements Repository<Copia> {
         }
     }
 
+
     @Override
     public Copia save(Copia entity) {
-        return null;
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(entity);
+            transaction.commit();
+            return entity;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -40,7 +54,30 @@ public class CopiaRepository implements Repository<Copia> {
 
     @Override
     public Optional<Copia> deleteById(Long id) {
-        return Optional.empty();
+        Transaction transaction = null;
+        Optional<Copia> deletedCopy = Optional.empty();
+
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+
+            Copia copia = session.find(Copia.class, id.intValue());
+
+            if (copia != null) {
+                deletedCopy = Optional.of(copia);
+                session.remove(copia);
+                transaction.commit();
+                return deletedCopy;
+            } else {
+                transaction.rollback();
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     @Override

@@ -7,7 +7,7 @@
     <session-factory>
         <!-- Configuración de la conexión a MySQL -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/database</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3307/base</property>
 
 
         <!-- Mostrar SQL en consola -->
@@ -25,7 +25,7 @@
         <mapping class="org.example.retofxhibernate.Copia.Copia"/>
         <mapping class="org.example.retofxhibernate.Usuario.Usuario"/>
         <mapping class="org.example.retofxhibernate.Pelicula.Pelicula"/>
-        <!-- <mapping class="com.tuempresa.modelo.Producto"/> -->
+
 
     </session-factory>
 </hibernate-configuration>

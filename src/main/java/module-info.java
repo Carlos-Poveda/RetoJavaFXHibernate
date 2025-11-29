@@ -13,7 +13,7 @@ module org.example.retofxhibernate {
 
     opens org.example.retofxhibernate.Usuario to org.hibernate.orm.core;
     opens org.example.retofxhibernate.Copia to org.hibernate.orm.core;
-
+    opens org.example.retofxhibernate.Pelicula to org.hibernate.orm.core;
 
     exports org.example.retofxhibernate;
     exports org.example.retofxhibernate.Controllers;
