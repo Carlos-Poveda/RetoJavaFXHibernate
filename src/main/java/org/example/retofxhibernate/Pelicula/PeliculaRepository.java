@@ -22,7 +22,7 @@ public class PeliculaRepository implements Repository<Pelicula> {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.persist(entity); // Guardamos la entidad
+            session.persist(entity);
             transaction.commit();
             return entity;
         } catch (Exception e) {
@@ -45,7 +45,6 @@ public class PeliculaRepository implements Repository<Pelicula> {
         }
     }
 
-    // ... (El resto de métodos opcionales se quedan vacíos o return null/empty) ...
     @Override
     public Optional<Pelicula> delete(Pelicula entity) { return Optional.empty(); }
     @Override
