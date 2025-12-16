@@ -14,6 +14,7 @@ import org.hibernate.SessionFactory;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AgregarCopiaController implements Initializable {
@@ -86,6 +87,15 @@ public class AgregarCopiaController implements Initializable {
             return;
         }
 
+        // Comprobación del ID para ver si existe
+        var peliculaExiste = peliculaRepository.findById(Long.valueOf(idPelicula));
+
+        if (peliculaExiste.isEmpty()) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Película no encontrada","No existe ninguna película con el ID " + idPelicula + " en la base de datos.");
+            return;
+        }
+
+        // Si llegamos aquí, la película existe. Procedemos a guardar.
         Copia nuevaCopia = new Copia();
         nuevaCopia.setId_pelicula(idPelicula);
         nuevaCopia.setId_usuario(usuarioLogueado.getId());
