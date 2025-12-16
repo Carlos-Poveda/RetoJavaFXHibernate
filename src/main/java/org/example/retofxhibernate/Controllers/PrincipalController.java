@@ -145,51 +145,67 @@ public class PrincipalController implements Initializable {
         alert.showAndWait();
     }
 
-    @javafx.fxml.FXML
+    // Modificación del método agregar para añadir la opción al administrador de agregar copias
+    @FXML
     public void agregar(ActionEvent actionEvent) {
         if (usuarioLogueado.getId() == 1) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/retofxhibernate/agregarpeli-view.fxml"));
-                Parent root = loader.load();
-                AgregarPeliController controller = loader.getController();
-
-                controller.setSessionFactory(this.sessionFactory);
-
-                Stage stage = new Stage();
-                stage.setTitle("Añadir Nueva Película");
-                stage.setScene(new Scene(root));
-
-                stage.initModality(Modality.APPLICATION_MODAL);
-
-                stage.showAndWait();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Error al abrir la ventana de agregar película: " + e.getMessage());
+            Alert selector = new Alert(Alert.AlertType.CONFIRMATION);
+            selector.setTitle("Menú de administrador");
+            selector.setHeaderText(null);
+            selector.setContentText("¿Qué desea agregar?");
+            ButtonType btnPelicula = new ButtonType("Nueva película");
+            ButtonType btnCopia = new ButtonType("Nueva copia");
+            ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+            selector.getButtonTypes().setAll(btnPelicula, btnCopia, btnCancelar);
+            Optional<ButtonType> resultado = selector.showAndWait();
+            if (resultado.isPresent()) {
+                if (resultado.get() == btnPelicula) {
+                    abrirVentanaAgregarPelicula();
+                } else if (resultado.get() == btnCopia) {
+                    abrirVentanaAgregarCopia();
+                }
             }
-
         } else {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/retofxhibernate/agregarcopia-view.fxml"));
-                Parent root = loader.load();
+            abrirVentanaAgregarCopia();
+        }
+    }
 
-                AgregarCopiaController controller = loader.getController();
+    // Método auxiliar para abrir la ventana de Películas
+    private void abrirVentanaAgregarPelicula() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/retofxhibernate/agregarpeli-view.fxml"));
+            Parent root = loader.load();
+            AgregarPeliController controller = loader.getController();
+            controller.setSessionFactory(this.sessionFactory);
+            Stage stage = new Stage();
+            stage.setTitle("Añadir Nueva Película");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir la ventana de agregar película.");
+        }
+    }
 
-                controller.setSessionFactory(this.sessionFactory);
-                controller.setUsuarioLogueado(this.usuarioLogueado);
+    // Método auxiliar para abrir la ventana de Copias
+    private void abrirVentanaAgregarCopia() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/retofxhibernate/agregarcopia-view.fxml"));
+            Parent root = loader.load();
+            AgregarCopiaController controller = loader.getController();
+            controller.setSessionFactory(this.sessionFactory);
+            controller.setUsuarioLogueado(this.usuarioLogueado);
+            Stage stage = new Stage();
+            stage.setTitle("Añadir Nueva Copia");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            refrescar(null);
 
-                Stage stage = new Stage();
-                stage.setTitle("Añadir Nueva Copia");
-                stage.setScene(new Scene(root));
-                stage.initModality(Modality.APPLICATION_MODAL);
-
-                stage.showAndWait();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Error al abrir la ventana de agregar copia: " + e.getMessage());
-            }
-
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo abrir la ventana de agregar copia.");
         }
     }
 

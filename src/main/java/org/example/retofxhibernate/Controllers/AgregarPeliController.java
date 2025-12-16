@@ -90,7 +90,7 @@ public class AgregarPeliController implements Initializable {
         if (tfTitulo.getText().isEmpty() || tfDirector.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Datos incompletos");
-            alert.setContentText("Por favor, rellena al menos Título y Director.");
+            alert.setContentText("Por favor, rellene los campos obligatorios.");
             alert.showAndWait();
             return;
         }
