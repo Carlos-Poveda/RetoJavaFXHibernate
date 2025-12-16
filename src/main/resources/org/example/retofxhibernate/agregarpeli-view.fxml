@@ -49,15 +49,15 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
                <children>
-                  <Label text="Título: " />
+                  <Label text="Título*" />
                   <TextField fx:id="tfTitulo" />
-                  <Label text="Género: " />
+                  <Label text="Género" />
                   <TextField fx:id="tfGenero" />
-                  <Label text="Año de lanzamiento: " />
+                  <Label text="Año de lanzamiento*" />
                   <TextField fx:id="tfFecha" />
-                  <Label text="Sinopsis: " />
+                  <Label text="Sinopsis" />
                   <TextField fx:id="tfSinopsis" />
-                  <Label text="Director: " />
+                  <Label text="Director*" />
                   <TextField fx:id="tfDirector" />
                </children>
             </VBox>
