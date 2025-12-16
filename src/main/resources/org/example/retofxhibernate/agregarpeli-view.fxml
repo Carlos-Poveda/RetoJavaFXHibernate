@@ -36,7 +36,7 @@
                 <TableColumn fx:id="colID" prefWidth="51.0" text="ID" />
                 <TableColumn fx:id="colTitulo" prefWidth="99.0" text="Título" />
                   <TableColumn fx:id="colGenero" prefWidth="75.0" text="Género" />
-                  <TableColumn fx:id="colFecha" prefWidth="141.0" text="Fecha de lanzamiento" />
+                  <TableColumn fx:id="colFecha" prefWidth="141.0" text="Año de lanzamiento" />
                   <TableColumn fx:id="colDescripcion" prefWidth="150.0" text="Sinopsis" />
                   <TableColumn fx:id="colDirector" prefWidth="83.0" text="Director" />
               </columns>
@@ -53,7 +53,7 @@
                   <TextField fx:id="tfTitulo" />
                   <Label text="Género: " />
                   <TextField fx:id="tfGenero" />
-                  <Label text="Fecha de lanzamiento: " />
+                  <Label text="Año de lanzamiento: " />
                   <TextField fx:id="tfFecha" />
                   <Label text="Sinopsis: " />
                   <TextField fx:id="tfSinopsis" />

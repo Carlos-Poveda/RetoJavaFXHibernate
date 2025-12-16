@@ -56,12 +56,9 @@ public class CopiaRepository implements Repository<Copia> {
     public Optional<Copia> deleteById(Long id) {
         Transaction transaction = null;
         Optional<Copia> deletedCopy = Optional.empty();
-
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-
             Copia copia = session.find(Copia.class, id.intValue());
-
             if (copia != null) {
                 deletedCopy = Optional.of(copia);
                 session.remove(copia);
