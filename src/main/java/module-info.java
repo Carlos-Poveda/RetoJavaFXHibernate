@@ -17,6 +17,8 @@ module org.example.retofxhibernate {
     
     // Abrir el paquete de entidades a ObjectDB para que pueda hacer reflexión
     opens org.example.retofxhibernate.Usuario to objectdb;
+    opens org.example.retofxhibernate.Pelicula to objectdb;
+    opens org.example.retofxhibernate.Copia to objectdb;
 
     // Exportar el paquete principal
     exports org.example.retofxhibernate;

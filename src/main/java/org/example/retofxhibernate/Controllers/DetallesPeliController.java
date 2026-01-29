@@ -61,8 +61,8 @@ public class DetallesPeliController implements Initializable {
             lblGenero.setText(peli.getGenero());
             lblDirector.setText(peli.getDirector());
 
-            if (peli.getAño() != null) {
-                lblAnio.setText(String.valueOf(peli.getAño()));
+            if (peli.getAnio() != null) {
+                lblAnio.setText(String.valueOf(peli.getAnio()));
             } else {
                 lblAnio.setText("Sin datos");
             }

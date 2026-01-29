@@ -12,7 +12,6 @@ import javax.persistence.EntityManagerFactory;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.UnaryOperator;
 
 public class AgregarPeliController implements Initializable {
 
@@ -49,9 +48,6 @@ public class AgregarPeliController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        aplicarFiltroNumerico(tfFecha);
-        aplicarLimiteLongitud(tfFecha, 4);
-
         colID.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getId())));
 
@@ -62,7 +58,7 @@ public class AgregarPeliController implements Initializable {
                 new SimpleStringProperty(cellData.getValue().getGenero()));
 
         colFecha.setCellValueFactory(cellData ->
-                new SimpleStringProperty(String.valueOf(cellData.getValue().getAño())));
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getAnio())));
 
         colDescripcion.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getDescripcion()));
@@ -98,15 +94,18 @@ public class AgregarPeliController implements Initializable {
             Pelicula nuevaPelicula = new Pelicula();
             nuevaPelicula.setTitulo(tfTitulo.getText());
             nuevaPelicula.setGenero(tfGenero.getText());
-            // Comprobación para que siempre se guarde un año correcto
-            if (Integer.parseInt(tfFecha.getText()) < 1800 || Integer.parseInt(tfFecha.getText()) > 2025) {
+            
+            int anio = Integer.parseInt(tfFecha.getText());
+            if (anio < 1800 || anio > 2025) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Error al guardar la película");
+                alert.setTitle("Dato no válido");
                 alert.setHeaderText(null);
-                alert.setContentText("El año de lanzamiento no es válido.");
+                alert.setContentText("El año de lanzamiento debe estar entre 1800 y 2025.");
                 alert.showAndWait();
                 return;
-            } else nuevaPelicula.setAño(Integer.valueOf(tfFecha.getText()));
+            }
+            nuevaPelicula.setAnio(anio);
+            
             nuevaPelicula.setDescripcion(tfSinopsis.getText());
             nuevaPelicula.setDirector(tfDirector.getText());
 
@@ -121,35 +120,19 @@ public class AgregarPeliController implements Initializable {
             alert.setContentText("Película guardada correctamente.");
             alert.showAndWait();
 
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error de formato");
+            alert.setContentText("El año debe ser un número válido.");
+            alert.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("Error al guardar la película, la fecha no es válida.");
+            alert.setTitle("Error al guardar");
+            alert.setContentText("Ocurrió un error inesperado al guardar la película: " + e.getMessage());
             alert.showAndWait();
         }
     }
-
-    // Nuevo método para permitir únicamente números en el text field para el año de lanzamiento
-    private void aplicarFiltroNumerico(TextField textField) {
-        UnaryOperator<TextFormatter.Change> filtro = (TextFormatter.Change change) -> {
-            String newText = change.getControlNewText();
-            if (newText.matches("[0-9]*")) {
-                return change;
-            }
-            return null;
-        };
-        textField.setTextFormatter(new TextFormatter<>(filtro));
-    }
-    // Método para permitir solo una cierta cantidad de cifras en el text field del año de lanzamiento
-    private void aplicarLimiteLongitud(TextField textField, int maxLength) {
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && newValue.length() > maxLength) {
-                textField.setText(oldValue);
-            }
-        });
-    }
-
 
     private void limpiarCampos() {
         tfTitulo.clear();

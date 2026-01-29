@@ -5,6 +5,8 @@
     <persistence-unit name="my-pu" transaction-type="RESOURCE_LOCAL">
         <provider>com.objectdb.jpa.Provider</provider>
         <class>org.example.retofxhibernate.Usuario.Usuario</class>
+        <class>org.example.retofxhibernate.Pelicula.Pelicula</class>
+        <class>org.example.retofxhibernate.Copia.Copia</class>
         <properties>
             <property name="javax.persistence.jdbc.url" value="objectdb:db/peliculas.odb"/>
             <property name="javax.persistence.jdbc.user" value="admin"/>

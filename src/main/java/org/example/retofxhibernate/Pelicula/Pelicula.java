@@ -18,7 +18,7 @@ public class Pelicula implements Serializable {
     private String genero;
 
     @Column(name = "anio_lanzamiento")
-    private Integer año;
+    private Integer anio;
 
     @Column(name = "descripcion")
     private String descripcion;
@@ -26,11 +26,11 @@ public class Pelicula implements Serializable {
     @Column(name = "director")
     private String director;
 
-    public Pelicula(Integer id, String titulo, String genero, Integer año, String descripcion, String director) {
+    public Pelicula(Integer id, String titulo, String genero, Integer anio, String descripcion, String director) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
-        this.año = año;
+        this.anio = anio;
         this.descripcion = descripcion;
         this.director = director;
     }
@@ -44,7 +44,7 @@ public class Pelicula implements Serializable {
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", genero='" + genero + '\'' +
-                ", año=" + año +
+                ", anio=" + anio +
                 ", descripcion='" + descripcion + '\'' +
                 ", director='" + director + '\'' +
                 '}';
@@ -74,12 +74,12 @@ public class Pelicula implements Serializable {
         this.genero = genero;
     }
 
-    public Integer getAño() {
-        return año;
+    public Integer getAnio() {
+        return anio;
     }
 
-    public void setAño(Integer año) {
-        this.año = año;
+    public void setAnio(Integer anio) {
+        this.anio = anio;
     }
 
     public String getDescripcion() {

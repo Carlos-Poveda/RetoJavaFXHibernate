@@ -44,7 +44,7 @@ public class AgregarCopiaController implements Initializable {
         colPeliID.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getId())));
         colPeliTitulo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitulo()));
         colPeliGenero.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGenero()));
-        colPeliFecha.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getAño())));
+        colPeliFecha.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getAnio())));
         colPeliDescrip.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescripcion()));
         colPeliDirector.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDirector()));
 
