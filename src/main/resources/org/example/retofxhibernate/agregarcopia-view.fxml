@@ -50,11 +50,11 @@
             </VBox>
             <VBox prefHeight="306.0" prefWidth="618.0">
                <children>
-                  <Label text="ID película: " />
+                  <Label text="ID película* " />
                   <TextField fx:id="tfIdPeli" />
-                  <Label text="Estado: " />
+                  <Label text="Estado* " />
                   <TextField fx:id="tfEstado" />
-                  <Label text="Soporte: " />
+                  <Label text="Soporte*" />
                   <TextField fx:id="tfSoporte" />
                </children>
                <HBox.margin>
