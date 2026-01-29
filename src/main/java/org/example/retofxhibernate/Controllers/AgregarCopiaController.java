@@ -4,13 +4,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*; // Importar Alert
+import javafx.scene.control.*;
 import org.example.retofxhibernate.Copia.Copia;
 import org.example.retofxhibernate.Copia.CopiaRepository;
 import org.example.retofxhibernate.Pelicula.Pelicula;
 import org.example.retofxhibernate.Pelicula.PeliculaRepository;
-import org.example.retofxhibernate.Usuario.Usuario; // Importar Usuario
-import org.hibernate.SessionFactory;
+import org.example.retofxhibernate.Usuario.Usuario;
+
+import javax.persistence.EntityManagerFactory;
 
 import java.net.URL;
 import java.util.List;
@@ -18,37 +19,24 @@ import java.util.ResourceBundle;
 
 public class AgregarCopiaController implements Initializable {
 
-    // --- Campos de UI ---
-    @FXML
-    private TableView<Pelicula> tablaPelis;
-    @FXML
-    private TableColumn<Pelicula, String> colPeliID;
-    @FXML
-    private TableColumn<Pelicula, String> colPeliTitulo;
-    @FXML
-    private TableColumn<Pelicula, String> colPeliGenero;
-    @FXML
-    private TableColumn<Pelicula, String> colPeliFecha;
-    @FXML
-    private TableColumn<Pelicula, String> colPeliDescrip;
-    @FXML
-    private TableColumn<Pelicula, String> colPeliDirector;
+    @FXML private TableView<Pelicula> tablaPelis;
+    @FXML private TableColumn<Pelicula, String> colPeliID;
+    @FXML private TableColumn<Pelicula, String> colPeliTitulo;
+    @FXML private TableColumn<Pelicula, String> colPeliGenero;
+    @FXML private TableColumn<Pelicula, String> colPeliFecha;
+    @FXML private TableColumn<Pelicula, String> colPeliDescrip;
+    @FXML private TableColumn<Pelicula, String> colPeliDirector;
 
-    @FXML
-    private TextField tfIdPeli;
-    @FXML
-    private TextField tfEstado;
-    @FXML
-    private TextField tfSoporte;
+    @FXML private TextField tfIdPeli;
+    @FXML private TextField tfEstado;
+    @FXML private TextField tfSoporte;
+    @FXML private Button btnAgregar;
 
-    @FXML
-    private Button btnAgregar;
-
-    private SessionFactory sessionFactory;
+    // CAMBIO CLAVE: Usamos EntityManagerFactory
+    private EntityManagerFactory emf;
     private CopiaRepository copiaRepository;
     private PeliculaRepository peliculaRepository;
     private Usuario usuarioLogueado;
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -59,7 +47,6 @@ public class AgregarCopiaController implements Initializable {
         colPeliDescrip.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescripcion()));
         colPeliDirector.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDirector()));
 
-        // Configuración de selección: Llena el campo tfIdPeli al seleccionar una fila
         tablaPelis.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 tfIdPeli.setText(String.valueOf(newSelection.getId()));
@@ -74,7 +61,7 @@ public class AgregarCopiaController implements Initializable {
         String soporte = tfSoporte.getText();
 
         if (idPeliText.isEmpty() || estado.isEmpty() || soporte.isEmpty()) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Error", "Debe rellenar todos los campos (ID Película, Estado y Soporte).");
+            mostrarAlerta(Alert.AlertType.WARNING, "Error", "Debe rellenar todos los campos.");
             return;
         }
 
@@ -82,7 +69,14 @@ public class AgregarCopiaController implements Initializable {
         try {
             idPelicula = Integer.parseInt(idPeliText);
         } catch (NumberFormatException e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error de formato", "El ID de la Película debe ser un número.");
+            mostrarAlerta(Alert.AlertType.ERROR, "Error de formato", "El ID debe ser un número.");
+            return;
+        }
+
+        // --- VALIDACIÓN DE EXISTENCIA ---
+        // Verificamos si la película existe antes de crear la copia
+        if (peliculaRepository.findById(idPelicula.longValue()).isEmpty()) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "La película con ID " + idPelicula + " no existe.");
             return;
         }
 
@@ -95,19 +89,18 @@ public class AgregarCopiaController implements Initializable {
         Copia guardada = copiaRepository.save(nuevaCopia);
 
         if (guardada != null) {
-            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Copia añadida correctamente a tu lista.");
-            tfIdPeli.clear();
-            tfEstado.clear();
-            tfSoporte.clear();
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "Copia añadida correctamente.");
+            limpiarCampos();
         } else {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo guardar la copia en la base de datos.");
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo guardar la copia.");
         }
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-        this.copiaRepository = new CopiaRepository(sessionFactory);
-        this.peliculaRepository = new PeliculaRepository(sessionFactory); // Inicializamos el repositorio de películas
+    // CAMBIO CLAVE: Renombramos/Adaptamos el setter
+    public void setEntityManagerFactory(EntityManagerFactory emf) {
+        this.emf = emf;
+        this.copiaRepository = new CopiaRepository(emf);
+        this.peliculaRepository = new PeliculaRepository(emf);
 
         if (this.usuarioLogueado != null) {
             cargarPeliculas();
@@ -116,11 +109,10 @@ public class AgregarCopiaController implements Initializable {
 
     public void setUsuarioLogueado(Usuario usuario) {
         this.usuarioLogueado = usuario;
-        if (this.sessionFactory != null) {
+        if (this.emf != null) {
             cargarPeliculas();
         }
     }
-
 
     private void cargarPeliculas() {
         if (peliculaRepository != null) {
@@ -128,6 +120,12 @@ public class AgregarCopiaController implements Initializable {
             List<Pelicula> peliculas = peliculaRepository.findAll();
             tablaPelis.getItems().addAll(peliculas);
         }
+    }
+
+    private void limpiarCampos() {
+        tfIdPeli.clear();
+        tfEstado.clear();
+        tfSoporte.clear();
     }
 
     private void mostrarAlerta(Alert.AlertType type, String title, String content) {

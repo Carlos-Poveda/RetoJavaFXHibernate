@@ -8,7 +8,10 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.example.retofxhibernate.Pelicula.Pelicula;
 import org.example.retofxhibernate.Pelicula.PeliculaRepository;
-import org.hibernate.SessionFactory;
+
+// CAMBIO: Importar JPA en lugar de Hibernate
+import javax.persistence.EntityManagerFactory;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -27,25 +30,29 @@ public class DetallesPeliController implements Initializable {
     @FXML
     private Label lblSinopsis;
 
-    private SessionFactory sessionFactory;
+    // CAMBIO: Usamos la factoría de JPA
+    private EntityManagerFactory emf;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // Normalmente se deja vacío si la carga depende de datos externos
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    // CAMBIO: El método ahora recibe el EntityManagerFactory
+    public void setEntityManagerFactory(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
     public void cargarDetalles(Integer idPelicula) {
-        if (sessionFactory == null) {
-            System.err.println("Error: SessionFactory no inicializada.");
+        if (emf == null) {
+            System.err.println("Error: EntityManagerFactory no inicializada.");
             return;
         }
 
-        PeliculaRepository peliculaRepository = new PeliculaRepository(sessionFactory);
+        // El repositorio ahora se inicializa con el emf de JPA
+        PeliculaRepository peliculaRepository = new PeliculaRepository(emf);
 
+        // Buscamos la película en el archivo .odb
         Optional<Pelicula> peliculaOpt = peliculaRepository.findById(idPelicula.longValue());
 
         if (peliculaOpt.isPresent()) {
@@ -53,9 +60,13 @@ public class DetallesPeliController implements Initializable {
             lblTitulo.setText(peli.getTitulo());
             lblGenero.setText(peli.getGenero());
             lblDirector.setText(peli.getDirector());
-            if (peli.getAño()!= null) {
-                lblAnio.setText(peli.getAño().toString());
-            } else lblAnio.setText("sin datos");
+
+            if (peli.getAño() != null) {
+                lblAnio.setText(String.valueOf(peli.getAño()));
+            } else {
+                lblAnio.setText("Sin datos");
+            }
+
             lblSinopsis.setText(peli.getDescripcion());
         } else {
             lblTitulo.setText("PELÍCULA NO ENCONTRADA");

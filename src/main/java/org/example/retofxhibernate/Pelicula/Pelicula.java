@@ -1,6 +1,6 @@
 package org.example.retofxhibernate.Pelicula;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity

@@ -15,6 +15,8 @@ import org.example.retofxhibernate.Common.DataProvider;
 import org.example.retofxhibernate.Usuario.Usuario;
 import org.example.retofxhibernate.Usuario.UsuarioRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -33,50 +35,58 @@ public class LoginController implements Initializable {
     private Button btnSalir;
 
     private UsuarioRepository usuarioRepository;
+    private EntityManagerFactory emf;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        usuarioRepository = new UsuarioRepository(DataProvider.getSessionFactory());
+        this.emf = DataProvider.getEntityManagerFactory();
+        this.usuarioRepository = new UsuarioRepository(emf);
     }
 
     public void salir(ActionEvent actionEvent) {
         System.exit(0);
     }
 
-    public void inicio(ActionEvent actionEvent) throws IOException {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        Usuario usuarioLogueado = null;
-        boolean iniciar = false;
-        for (Usuario usuario : usuarios) {
-            if (usuario.getNombre_usuario().equals(tfUsuario.getText()) && usuario.getContraseña().equals(pfContra.getText())) {
-                iniciar = true;
-                usuarioLogueado = usuario;
-
+    private boolean hayConexion() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            // Realiza una consulta válida para verificar la conexión.
+            em.createQuery("SELECT u FROM Usuario u").setMaxResults(1).getResultList();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
             }
         }
-        if (iniciar) {
+    }
+
+    @FXML
+    public void inicio(ActionEvent actionEvent) throws IOException {
+        if (!hayConexion()) {
+            System.out.println("Error de Conexión: verifica el archivo de base de datos.");
+            return;
+        }
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        Usuario usuarioLogueado = usuarios.stream()
+                .filter(u -> u.getNombre_usuario().equals(tfUsuario.getText()) && u.getContraseña().equals(pfContra.getText()))
+                .findFirst().orElse(null);
+
+        if (usuarioLogueado != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/retofxhibernate/principal-view.fxml"));
             Parent root = loader.load();
 
-            PrincipalController principalController = loader.getController();
-            principalController.setUsuarioLogueado(usuarioLogueado);
-            principalController.setSessionFactory(DataProvider.getSessionFactory());
+            PrincipalController pc = loader.getController();
+            pc.setUsuarioLogueado(usuarioLogueado);
+            pc.setEntityManagerFactory(emf); // Pasamos EMF
 
-            Stage stage = new Stage();
-            stage.setTitle("Lista de copias");
-
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-
-            stage.show();
-            Stage loginStage = (Stage) btnInicio.getScene().getWindow();
-            loginStage.close();
+            Stage stage = (Stage) btnInicio.getScene().getWindow();
+            stage.setScene(new Scene(root));
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Error");
-            alert.setHeaderText("Las credenciales no son válidas");
-            alert.setContentText("El usuario o la contraseña no son correctos.");
-            alert.showAndWait();
+            System.out.println("Error: Credenciales incorrectas.");
         }
     }
 

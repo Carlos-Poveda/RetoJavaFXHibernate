@@ -1,97 +1,93 @@
 package org.example.retofxhibernate.Copia;
 
-import org.example.retofxhibernate.Common.Repository;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-public class CopiaRepository implements Repository<Copia> {
-    SessionFactory sessionFactory;
+public class CopiaRepository {
 
-    public CopiaRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    private final EntityManagerFactory emf;
+
+    public CopiaRepository(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
-    public List<Copia> findByUserId(Integer userId) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Copia> query = session.createQuery(
-                    "from Copia c where c.id_usuario = :userId", Copia.class);
-            query.setParameter("userId", userId);
-
-            return query.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
-    }
-
-
-    @Override
-    public Copia save(Copia entity) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(entity);
-            transaction.commit();
-            return entity;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+    // Guardar o Actualizar una copia
+    public Copia save(Copia copia) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            if (copia.getId() == null) {
+                em.persist(copia);
+            } else {
+                copia = em.merge(copia);
             }
+            em.getTransaction().commit();
+            return copia;
+        } catch (Exception e) {
             e.printStackTrace();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             return null;
+        } finally {
+            em.close();
         }
     }
 
-    @Override
-    public Optional<Copia> delete(Copia entity) {
-        return Optional.empty();
-    }
-
-    @Override
+    // Borrar copia por ID
     public Optional<Copia> deleteById(Long id) {
-        Transaction transaction = null;
-        Optional<Copia> deletedCopy = Optional.empty();
-
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-
-            Copia copia = session.find(Copia.class, id.intValue());
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            // Primero hay que encontrar el objeto para poder borrarlo
+            Copia copia = em.find(Copia.class, id.intValue()); // Cast a int si tu @Id es Integer
 
             if (copia != null) {
-                deletedCopy = Optional.of(copia);
-                session.remove(copia);
-                transaction.commit();
-                return deletedCopy;
+                em.remove(copia);
+                em.getTransaction().commit();
+                return Optional.of(copia);
             } else {
-                transaction.rollback();
+                em.getTransaction().rollback();
                 return Optional.empty();
             }
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             return Optional.empty();
+        } finally {
+            em.close();
         }
     }
 
-    @Override
+    // Método personalizado: Encontrar copias de un usuario específico
+    public List<Copia> findByUserId(Integer userId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jpql = "SELECT c FROM Copia c WHERE c.id_usuario = :userId";
+            TypedQuery<Copia> query = em.createQuery(jpql, Copia.class);
+            query.setParameter("userId", userId);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        } finally {
+            em.close();
+        }
+    }
+
+    // Buscar copia por ID (Auxiliar)
     public Optional<Copia> findById(Long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public List<Copia> findAll() {
-        return List.of();
-    }
-
-    @Override
-    public Long count() {
-        return 0L;
+        EntityManager em = emf.createEntityManager();
+        try {
+            Copia copia = em.find(Copia.class, id.intValue());
+            return Optional.ofNullable(copia);
+        } finally {
+            em.close();
+        }
     }
 }

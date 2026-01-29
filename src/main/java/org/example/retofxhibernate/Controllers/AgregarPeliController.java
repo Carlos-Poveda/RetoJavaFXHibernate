@@ -7,15 +7,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.example.retofxhibernate.Pelicula.Pelicula;
 import org.example.retofxhibernate.Pelicula.PeliculaRepository;
-import org.hibernate.SessionFactory;
 
+import javax.persistence.EntityManagerFactory;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class AgregarPeliController implements Initializable {
 
-    private SessionFactory sessionFactory;
+    private EntityManagerFactory emf;
     private PeliculaRepository peliculaRepository;
 
     @FXML
@@ -67,10 +67,9 @@ public class AgregarPeliController implements Initializable {
                 new SimpleStringProperty(cellData.getValue().getDirector()));
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-        this.peliculaRepository = new PeliculaRepository(sessionFactory);
-        cargarPeliculas();
+    public void setEntityManagerFactory(EntityManagerFactory emf) {
+        this.emf = emf;
+        this.peliculaRepository = new PeliculaRepository(emf);
     }
 
     private void cargarPeliculas() {

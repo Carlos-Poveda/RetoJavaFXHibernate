@@ -1,66 +1,70 @@
 package org.example.retofxhibernate.Pelicula;
 
-import org.example.retofxhibernate.Common.Repository;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-public class PeliculaRepository implements Repository<Pelicula> {
+// Nota: Ya no implementas Repository<Pelicula> si usaba Session,
+// o debes cambiar la interfaz Repository para usar EntityManager.
 
-    private final SessionFactory sessionFactory;
+public class PeliculaRepository {
+    private EntityManagerFactory emf;
 
-    public PeliculaRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public PeliculaRepository(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
-    @Override
-    public Pelicula save(Pelicula entity) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(entity);
-            transaction.commit();
-            return entity;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+    public Pelicula save(Pelicula pelicula) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            // En JPA estándar, 'persist' guarda nuevos.
+            // Si el objeto ya tiene ID y quieres actualizar, se usa 'merge'.
+            if (pelicula.getId() == null) {
+                em.persist(pelicula);
+            } else {
+                pelicula = em.merge(pelicula);
             }
-            e.printStackTrace();
-            return null;
+            em.getTransaction().commit();
+            return pelicula;
+        } finally {
+            em.close();
         }
     }
 
-    @Override
-    public List<Pelicula> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Pelicula> query = session.createQuery("from Pelicula", Pelicula.class);
-            return query.list();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
-    }
-
-    @Override
-    public Optional<Pelicula> delete(Pelicula entity) { return Optional.empty(); }
-    @Override
-    public Optional<Pelicula> deleteById(Long id) { return Optional.empty(); }
-
-    @Override
     public Optional<Pelicula> findById(Long id) {
-        try (Session session = sessionFactory.openSession()) {
-            Pelicula pelicula = session.find(Pelicula.class, id.intValue());
+        EntityManager em = emf.createEntityManager();
+        try {
+            // find funciona igual
+            Pelicula pelicula = em.find(Pelicula.class, id.intValue()); // Ojo al int/long
             return Optional.ofNullable(pelicula);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Optional.empty();
+        } finally {
+            em.close();
         }
     }
 
-    @Override
-    public Long count() { return 0L; }
+    public List<Pelicula> findAll() {
+        // 1. Crear el EntityManager desde la factoría
+        EntityManager em = emf.createEntityManager();
+        try {
+            // 2. Definir la consulta JPQL (Selecciona el objeto p de la clase Pelicula)
+            String jpql = "SELECT p FROM Pelicula p";
+
+            // 3. Crear la TypedQuery para asegurar que el resultado sea una lista de Peliculas
+            TypedQuery<Pelicula> query = em.createQuery(jpql, Pelicula.class);
+
+            // 4. Ejecutar y retornar la lista
+            return query.getResultList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Retornamos una lista vacía en caso de error para evitar NullPointerException en el Controller
+            return List.of();
+        } finally {
+            // 5. IMPORTANTE: Cerrar siempre el EntityManager
+            em.close();
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package org.example.retofxhibernate.Copia;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -24,14 +24,15 @@ public class Copia implements Serializable {
     @Column(name = "soporte")
     private String soporte;
 
-    public Copia() {}
-
     public Copia(Integer id, Integer id_pelicula, Integer id_usuario, String estado, String soporte) {
         this.id = id;
         this.id_pelicula = id_pelicula;
         this.id_usuario = id_usuario;
         this.estado = estado;
         this.soporte = soporte;
+    }
+
+    public Copia() {
     }
 
     @Override
